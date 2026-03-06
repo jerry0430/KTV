@@ -1,0 +1,496 @@
+/* Grandma KTV - Preview 純 HTML/CSS/JS 版 */
+
+:root {
+  --color-black: #000;
+  --color-white: #fff;
+  --slate-300: rgb(203 213 225);
+  --slate-400: rgb(148 163 184);
+  --slate-900: rgb(15 23 42);
+  --gray-400: rgb(156 163 175);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  font-family: system-ui, -apple-system, sans-serif;
+  /* PWA 全螢幕時保留安全區域（瀏海、虛擬按鈕列） */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.hidden-input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ========== 背景 ========== */
+.body-bg {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  transform: translateZ(0);
+}
+
+.body-bg-top {
+  top: 0;
+  height: 520px;
+  background: linear-gradient(
+    90deg,
+    rgb(30 58 138),
+    rgb(147 51 234),
+    rgb(249 115 22),
+    rgb(250 204 21)
+  );
+  background-size: 200% 100%;
+  animation: gradient 12s ease infinite;
+}
+
+.body-bg-fade {
+  top: 205px;
+  height: 315px;
+  background: linear-gradient(to bottom, transparent, var(--color-black));
+}
+
+@keyframes gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ========== Header ========== */
+.header {
+  position: relative;
+  z-index: 10;
+  padding: 3rem;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-brand {
+  flex: 1;
+}
+
+.header-title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin: 0 0 0.75rem 0;
+}
+
+.header-subtitle {
+  font-size: 1.5rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-link {
+  display: inline-block;
+  padding: 0.75rem 1rem;
+  width: 6rem;
+  text-align: center;
+  border-radius: 9999px;
+  text-decoration: none;
+  color: var(--color-white);
+  background: rgba(255, 255, 255, 0.23);
+  transition: background-color 0.2s;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.nav-link.active {
+  color: var(--color-black);
+  background: var(--color-white);
+}
+
+/* ========== Main ========== */
+.main {
+  position: relative;
+  z-index: 10;
+}
+
+.view {
+  display: block;
+}
+
+.view.hidden {
+  display: none;
+}
+
+/* ========== Home - 歌曲清單 ========== */
+.song-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 2rem;
+  padding: 0 2rem;
+  flex: 1;
+}
+
+.song-card {
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+
+.song-card:active {
+  transform: scale(0.98);
+}
+
+.song-card-poster {
+  aspect-ratio: 16 / 9;
+  background: transparent;
+  position: relative;
+}
+
+.song-card-poster img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 1rem;
+  border: 1px solid var(--color-white);
+}
+
+.song-card-title {
+  font-weight: 500;
+  font-size: 1.5rem;
+  line-height: 1.75rem;
+  margin-top: 0.75rem;
+}
+
+.song-card-artist {
+  font-size: 1.25rem;
+  color: var(--gray-400);
+  margin-top: 0.25rem;
+  line-height: 1.75rem;
+}
+
+.empty-state {
+  padding: 2.5rem;
+  text-align: center;
+  color: var(--slate-400);
+}
+
+/* ========== Admin ========== */
+#view-admin {
+  padding: 0 2rem;
+}
+
+.admin-panel {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(203, 213, 225, 0.18);
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 1rem;
+}
+
+.admin-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.75rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(203, 213, 225, 0.25);
+  cursor: pointer;
+  color: var(--color-white);
+  font-size: 1rem;
+  background: rgba(203, 213, 225, 0.08);
+  transition: background-color 0.2s;
+}
+
+.btn:hover {
+  background: rgba(203, 213, 225, 0.5);
+}
+
+.btn-secondary {
+}
+
+.btn-primary {
+  background: rgb(22 101 52);
+  border-color: rgba(203, 213, 225, 0.25);
+}
+
+.btn-primary:hover {
+  background: rgba(34, 197, 94, 0.5);
+}
+
+.btn-cancel {
+  background: rgb(220 38 38);
+}
+
+.btn-cancel:hover {
+  background: rgba(220, 38, 38, 0.7);
+}
+
+/* ========== Song Form ========== */
+.song-form {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 1rem;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-row-full {
+  grid-column: 1 / -1;
+}
+
+.form-label {
+  font-size: 1rem;
+  margin-bottom: 0.25rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(203, 213, 225, 0.25);
+  background: rgba(15, 23, 42, 0.4);
+  color: var(--color-white);
+  margin-top: 0.25rem;
+  font-size: 1rem;
+}
+
+.form-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.625rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .song-form {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========== Song Table ========== */
+.song-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.song-table th,
+.song-table td {
+  border-bottom: 1px solid rgba(203, 213, 225, 0.18);
+  padding: 0.625rem 0.5rem;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.song-table th {
+  font-weight: 700;
+}
+
+.song-table .col-title {
+  max-width: 12rem;
+  width: 33.333%;
+}
+
+.song-table td img {
+  width: 3.25rem;
+  height: 2.25rem;
+  object-fit: cover;
+  border-radius: 0.375rem;
+  border: 1px solid rgba(203, 213, 225, 0.25);
+}
+
+.song-table .cell-title {
+  max-width: 12rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.song-table code {
+  font-family: ui-monospace, monospace;
+  font-size: 0.875rem;
+}
+
+.btn-edit {
+  margin-right: 0.375rem;
+  padding: 0.75rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(203, 213, 225, 0.25);
+  background: rgba(5, 150, 105, 0.52);
+  color: var(--color-white);
+  cursor: pointer;
+}
+
+.btn-edit:hover {
+  background: rgba(5, 150, 105, 0.7);
+}
+
+.btn-delete {
+  padding: 0.75rem 1rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(203, 213, 225, 0.25);
+  background: rgba(220, 38, 38, 0.5);
+  color: var(--color-white);
+  cursor: pointer;
+}
+
+.btn-delete:hover {
+  background: rgba(220, 38, 38, 0.7);
+}
+
+.table-empty {
+  padding: 1.25rem;
+  text-align: center;
+  color: var(--slate-400);
+}
+
+/* ========== Player Overlay ========== */
+.player-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(15, 23, 42, 0.88);
+  z-index: 60;
+}
+
+.player-overlay.hidden {
+  display: none !important;
+}
+
+.player-inner {
+  width: 95%;
+  max-width: 72rem;
+}
+
+.player-video-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--color-black);
+  border: 1px solid rgba(203, 213, 225, 0.2);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.yt-frame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.yt-embed-iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.player-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  background: linear-gradient(to top, rgba(15, 23, 42, 0.6), transparent);
+  position: sticky;
+  bottom: 0;
+}
+
+.player-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--slate-300);
+  font-size: 0.875rem;
+}
+
+.player-thumb {
+  width: 7.5rem;
+  height: 5.5rem;
+  border-radius: 0.5rem;
+  object-fit: cover;
+  border: 1px solid var(--color-white);
+}
+
+.player-thumb.hidden {
+  display: none;
+}
+
+.player-song-info strong {
+  font-size: 1.5rem;
+  display: block;
+}
+
+.player-song-info div {
+  font-size: 1.25rem;
+}
+
+.player-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.btn-player {
+  width: 9rem;
+  height: 4rem;
+  font-size: 1.5rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(203, 213, 225, 0.25);
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-close {
+  background: rgb(220, 38, 38);
+  color: var(--color-white);
+}
+
+.btn-close:hover {
+  background: rgb(185, 28, 28);
+}

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no, orientation=landscape, viewport-fit=cover"
+    />
+    <meta name="description" content="卡拉OK點歌系統 - Grandma KTV" />
+    <!-- 避免 YouTube 嵌入錯誤 153：送出 referrer + 播放器使用 youtube-nocookie.com（勿用 file:// 開頁，請用本地 HTTP 伺服器） -->
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <title>Grandma KTV - 卡拉OK點歌系統</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="logo.svg" />
+
+    <!-- PWA：加入主畫面時使用 logo、隱藏瀏覽器介面 -->
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="KTV" />
+    <link rel="apple-touch-icon" href="logo.svg" />
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- 背景漸層 -->
+    <div class="body-bg body-bg-top"></div>
+    <div class="body-bg body-bg-fade"></div>
+
+    <!-- 頂部導覽 -->
+    <header class="header">
+      <div class="header-inner">
+        <div class="header-brand">
+          <h1 class="header-title">👵🏻 KTV</h1>
+          <p class="header-subtitle">享受專業級卡拉OK體驗</p>
+        </div>
+        <nav class="header-nav">
+          <a href="#/" class="nav-link nav-link-home" data-route="/">歌曲清單</a>
+          <a href="#/admin" class="nav-link nav-link-admin" data-route="/admin">影片管理</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="main">
+      <!-- 歌曲清單頁 (Home) -->
+      <section id="view-home" class="view hidden">
+        <div class="song-grid" id="song-grid"></div>
+        <div id="empty-state" class="empty-state hidden">
+          目前沒有歌曲，請前往「影片管理」新增清單。
+        </div>
+        <!-- 播放器覆蓋層由 JS 插入 -->
+      </section>
+
+      <!-- 影片管理頁 (Admin) -->
+      <section id="view-admin" class="view hidden">
+        <div class="admin-panel">
+          <div class="admin-header">
+            <h2 class="admin-title">影片管理</h2>
+            <div class="admin-actions">
+              <button type="button" class="btn btn-secondary" id="btn-export">匯出 JSON</button>
+              <label class="btn btn-secondary">
+                匯入 JSON
+                <input type="file" accept="application/json" id="input-import" class="hidden-input" />
+              </label>
+            </div>
+          </div>
+
+          <form id="song-form" class="song-form">
+            <div class="form-row form-row-full">
+              <label class="form-label">歌曲名稱</label>
+              <input type="text" id="form-title" required placeholder="例如：小幸運" class="form-input" />
+            </div>
+            <div class="form-row">
+              <label class="form-label">歌手</label>
+              <input type="text" id="form-artist" placeholder="田馥甄" class="form-input" />
+            </div>
+            <div class="form-row">
+              <label class="form-label">YouTube 連結或ID（會自動解析）</label>
+              <input type="text" id="form-yt" required placeholder="https://youtu.be/xxxx 或 dQw4w9WgXcQ" class="form-input" />
+            </div>
+            <div class="form-row form-row-full">
+              <label class="form-label">專輯封面 URL（可留白自動帶 YouTube 縮圖）</label>
+              <input type="text" id="form-cover" placeholder="https://...jpg" class="form-input" />
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" id="btn-reset">重新填寫</button>
+              <button type="button" class="btn btn-cancel hidden" id="btn-cancel">取消</button>
+              <button type="submit" class="btn btn-primary" id="btn-submit">新增歌曲</button>
+            </div>
+          </form>
+
+          <div class="table-wrap">
+            <table class="song-table">
+              <thead>
+                <tr>
+                  <th>封面</th>
+                  <th class="col-title">歌名</th>
+                  <th>歌手</th>
+                  <th>YT ID</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody id="song-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 播放器覆蓋層 (由 JS 動態插入到 body) -->
+    <div id="player-overlay" class="player-overlay hidden">
+      <div class="player-inner">
+        <div class="player-video-wrap">
+          <div id="yt-frame" class="yt-frame"></div>
+        </div>
+        <div class="player-controls">
+          <div class="player-info">
+            <img id="player-thumb" src="" alt="" class="player-thumb hidden" />
+            <div id="player-song-info" class="player-song-info">
+              <strong id="player-title"></strong>
+              <div id="player-artist"></div>
+            </div>
+          </div>
+          <div class="player-buttons">
+            <button type="button" class="btn-player btn-close" id="btn-close-player">結束</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
