@@ -248,10 +248,22 @@ function renderPWASheetContent(type) {
       </div>
     `
   } else if (type === 'ipad') {
-    titleEl.textContent = '本站不支援 iPad'
+    titleEl.textContent = 'iPad 使用說明'
     contentEl.innerHTML = `
-      <div class="pwa-sheet-warning">
-        本站目前僅支援 Android 平板電腦。請改用 Android 平板電腦開啟此網址以安裝應用程式，獲得更好的使用體驗。
+      <div class="pwa-sheet-info">
+        將本站加入主畫面後，在 iPad 上點擊歌曲無法自動播放。點選歌曲後，請再手動點擊 YouTube 播放器上的播放按鈕即可開始播放。
+      </div>
+      <div class="pwa-sheet-step">
+        <span class="pwa-sheet-step-num">1</span>
+        <span class="pwa-sheet-step-text">點選畫面下方的「<strong>分享</strong>」圖示</span>
+      </div>
+      <div class="pwa-sheet-step">
+        <span class="pwa-sheet-step-num">2</span>
+        <span class="pwa-sheet-step-text">上滑並點擊「<strong>加入主畫面</strong>」</span>
+      </div>
+      <div class="pwa-sheet-step">
+        <span class="pwa-sheet-step-num">3</span>
+        <span class="pwa-sheet-step-text">點選「<strong>新增</strong>」安裝至主畫面</span>
       </div>
     `
   }
