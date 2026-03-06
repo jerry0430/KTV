@@ -194,6 +194,152 @@ body {
   color: var(--slate-400);
 }
 
+/* ========== PWA 加入主畫面 Bottom Sheet ========== */
+.pwa-bottom-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0;
+  pointer-events: none;
+}
+
+.pwa-bottom-sheet:not(.hidden) {
+  pointer-events: auto;
+}
+
+.pwa-sheet-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.pwa-bottom-sheet:not(.hidden) .pwa-sheet-backdrop {
+  opacity: 1;
+}
+
+.pwa-sheet-panel {
+  position: relative;
+  width: 100%;
+  max-width: 28rem;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.98), rgba(248, 250, 252, 0.98));
+  color: var(--slate-900);
+  border-radius: 1.25rem 1.25rem 0 0;
+  padding: 1.5rem 1.5rem 2rem;
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.3);
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.pwa-bottom-sheet:not(.hidden) .pwa-sheet-panel {
+  transform: translateY(0);
+}
+
+.pwa-sheet-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--slate-400);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.pwa-sheet-close:hover {
+  color: var(--slate-900);
+}
+
+.pwa-sheet-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.pwa-sheet-icon img {
+  width: 4rem;
+  height: 4rem;
+  object-fit: contain;
+}
+
+.pwa-sheet-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 0 0 1.25rem 0;
+  padding: 0 2rem;
+  line-height: 1.4;
+}
+
+.pwa-sheet-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pwa-sheet-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: rgba(15, 23, 42, 0.06);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.pwa-sheet-step-num {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--slate-900);
+  color: var(--color-white);
+  font-size: 0.875rem;
+  font-weight: 700;
+  border-radius: 50%;
+}
+
+.pwa-sheet-step-text {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.pwa-sheet-info {
+  padding: 1.25rem 1.5rem;
+  background: rgba(30, 58, 138, 0.08);
+  border: 1px solid rgba(30, 58, 138, 0.2);
+  border-radius: 0.75rem;
+  color: rgb(30 58 138);
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.pwa-sheet-warning {
+  padding: 1.25rem 1.5rem;
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: 0.75rem;
+  color: rgb(127 29 29);
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
 /* ========== Admin ========== */
 #view-admin {
   padding: 0 2rem;
@@ -217,6 +363,13 @@ body {
   font-size: 1.5rem;
   font-weight: 700;
   margin: 0;
+}
+
+.admin-version {
+  font-size: 0.75rem;
+  font-weight: 400;
+  opacity: 0.7;
+  margin-left: 0.5rem;
 }
 
 .admin-actions {

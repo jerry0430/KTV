@@ -178,6 +178,100 @@ function playSong(song, index) {
   container.appendChild(iframe)
 }
 
+// ---------- PWA 加入主畫面 Bottom Sheet ----------
+const PWA_SHEET_DISMISSED = 'pwa_sheet_dismissed_session'
+
+function isPWAInstalled() {
+  if (window.matchMedia('(display-mode: standalone)').matches) return true
+  if (window.matchMedia('(display-mode: fullscreen)').matches) return true
+  if (window.matchMedia('(display-mode: minimal-ui)').matches) return true
+  if (navigator.standalone === true) return true
+  if (document.referrer.includes('android-app://')) return true
+  return false
+}
+
+function isIPad() {
+  const ua = navigator.userAgent
+  if (ua.includes('iPad')) return true
+  if (ua.includes('Macintosh') && navigator.maxTouchPoints > 1) return true
+  return false
+}
+
+function isAndroidTablet() {
+  return navigator.userAgent.includes('Android')
+}
+
+function isPhoneSized() {
+  const w = Math.min(window.innerWidth, window.screen.width)
+  return w < 768
+}
+
+function shouldShowPWASheet() {
+  if (isPWAInstalled()) return false
+  if (sessionStorage.getItem(PWA_SHEET_DISMISSED)) return false
+  return isPhoneSized() || isAndroidTablet() || isIPad()
+}
+
+function getPWASheetType() {
+  if (isPhoneSized()) return 'phone'
+  if (isIPad()) return 'ipad'
+  if (isAndroidTablet()) return 'android'
+  return null
+}
+
+function renderPWASheetContent(type) {
+  const titleEl = document.getElementById('pwa-sheet-title')
+  const contentEl = document.getElementById('pwa-sheet-content')
+  if (!titleEl || !contentEl) return
+
+  if (type === 'phone') {
+    titleEl.textContent = '為獲得最佳體驗'
+    contentEl.innerHTML = `
+      <div class="pwa-sheet-info">
+        建議使用平板電腦裝置開啟本站，以獲得最佳卡拉OK使用體驗。
+      </div>
+    `
+  } else if (type === 'android') {
+    titleEl.textContent = '加入主畫面以獲得更好的使用體驗。'
+    contentEl.innerHTML = `
+      <div class="pwa-sheet-step">
+        <span class="pwa-sheet-step-num">1</span>
+        <span class="pwa-sheet-step-text">點擊瀏覽器導覽列右側的「<strong>⋮ 更多</strong>」圖示</span>
+      </div>
+      <div class="pwa-sheet-step">
+        <span class="pwa-sheet-step-num">2</span>
+        <span class="pwa-sheet-step-text">選擇「<strong>安裝應用程式</strong>」或「<strong>加到主畫面</strong>」</span>
+      </div>
+      <div class="pwa-sheet-step">
+        <span class="pwa-sheet-step-num">3</span>
+        <span class="pwa-sheet-step-text">點擊「<strong>安裝</strong>」或「<strong>新增</strong>」完成安裝</span>
+      </div>
+    `
+  } else if (type === 'ipad') {
+    titleEl.textContent = '本站不支援 iPad'
+    contentEl.innerHTML = `
+      <div class="pwa-sheet-warning">
+        本站目前僅支援 Android 平板電腦。請改用 Android 平板電腦開啟此網址以安裝應用程式，獲得更好的使用體驗。
+      </div>
+    `
+  }
+}
+
+function showPWASheet() {
+  const type = getPWASheetType()
+  if (!type) return
+  const sheet = document.getElementById('pwa-bottom-sheet')
+  if (!sheet) return
+  renderPWASheetContent(type)
+  sheet.classList.remove('hidden')
+}
+
+function hidePWASheet() {
+  const sheet = document.getElementById('pwa-bottom-sheet')
+  if (sheet) sheet.classList.add('hidden')
+  sessionStorage.setItem(PWA_SHEET_DISMISSED, '1')
+}
+
 // ---------- 路由 ----------
 function getRoute() {
   const hash = window.location.hash.slice(1) || '/'
@@ -217,9 +311,13 @@ function renderHome() {
 
   if (songs.length === 0) {
     emptyState.classList.remove('hidden')
-    return
+  } else {
+    emptyState.classList.add('hidden')
   }
-  emptyState.classList.add('hidden')
+
+  if (shouldShowPWASheet()) {
+    requestAnimationFrame(() => showPWASheet())
+  }
 
   songs.forEach((song, index) => {
     const card = document.createElement('article')
@@ -365,6 +463,10 @@ document.getElementById('input-import').addEventListener('change', async (e) => 
   }
   e.target.value = ''
 })
+
+// ---------- PWA Bottom Sheet 關閉按鈕 ----------
+document.getElementById('pwa-sheet-close')?.addEventListener('click', hidePWASheet)
+document.querySelector('.pwa-sheet-backdrop')?.addEventListener('click', hidePWASheet)
 
 // ---------- 播放器按鈕（自建 iframe 無 API，僅保留結束鈕）----------
 document.getElementById('btn-close-player').addEventListener('click', closePlayer)

@@ -46,6 +46,16 @@
     <main class="main">
       <!-- 歌曲清單頁 (Home) -->
       <section id="view-home" class="view hidden">
+        <!-- PWA 加入主畫面引導 Bottom Sheet -->
+        <div id="pwa-bottom-sheet" class="pwa-bottom-sheet hidden">
+          <div class="pwa-sheet-backdrop"></div>
+          <div class="pwa-sheet-panel">
+            <button type="button" class="pwa-sheet-close" id="pwa-sheet-close" aria-label="關閉">×</button>
+            <div class="pwa-sheet-icon"><img src="logo.svg" alt="" /></div>
+            <h3 class="pwa-sheet-title" id="pwa-sheet-title"></h3>
+            <div class="pwa-sheet-content" id="pwa-sheet-content"></div>
+          </div>
+        </div>
         <div class="song-grid" id="song-grid"></div>
         <div id="empty-state" class="empty-state hidden">
           目前沒有歌曲，請前往「影片管理」新增清單。
@@ -57,7 +67,7 @@
       <section id="view-admin" class="view hidden">
         <div class="admin-panel">
           <div class="admin-header">
-            <h2 class="admin-title">影片管理</h2>
+            <h2 class="admin-title">影片管理 <span class="admin-version">v1.0</span></h2>
             <div class="admin-actions">
               <button type="button" class="btn btn-secondary" id="btn-export">匯出 JSON</button>
               <label class="btn btn-secondary">
